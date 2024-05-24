@@ -1,40 +1,38 @@
-# Build Geth in a stock Go builder container
-FROM golang:1.15-alpine as builder
+# Use the official CentOS 7 image as the base image
+FROM centos:7
 
-# Install necessary build tools
-RUN apk add --no-cache make gcc musl-dev linux-headers git
+# Install EPEL repository and Software Collections
+RUN yum install -y epel-release centos-release-scl
 
-# Set the working directory
-WORKDIR /go-ethereum
+# Install Development Tools and devtoolset-7
+RUN yum groupinstall -y "Development Tools" && \
+    yum install -y devtoolset-7
 
-# Add source code
-ADD . .
+# Install other dependencies
+RUN yum install -y binutils libtool autoconf automake golang git
 
-# Build the Geth binary
-RUN make geth
+# Enable devtoolset-7
+RUN echo "source /opt/rh/devtoolset-7/enable" >> /etc/profile.d/devtoolset-7.sh
+ENV PATH="/opt/rh/devtoolset-7/root/usr/bin:${PATH}"
 
-# Final stage: use a lightweight Alpine image for runtime
-FROM alpine:latest
+# Set up environment variables for Go
+ENV PATH="/usr/local/go/bin:${PATH}"
+ENV GOPATH="/root/go"
 
-# Install runtime dependencies
-RUN apk add --no-cache ca-certificates
+# Clone the Core Geth repository and build it
+RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
+    cd /root/core-geth && \
+    git checkout esa_new_network && \
+    make all
 
-# Set working directory
-WORKDIR /root
+# Copy the entrypoint script into the container
+COPY entrypoint.sh /root/core-geth/entrypoint.sh
+RUN chmod +x /root/core-geth/entrypoint.sh
 
-# Copy the Geth binary from the builder stage
-COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
-
-# Copy entrypoint script
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+WORKDIR /root/core-geth
 
 # Expose necessary ports
 EXPOSE 8545 8546 30303 30303/udp
 
-# Health check to ensure the Geth node is running
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget -q --spider http://localhost:8545/ || exit 1
-
 # Use entrypoint.sh as the entrypoint
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/root/core-geth/entrypoint.sh"]
