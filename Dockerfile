@@ -23,7 +23,7 @@ RUN useradd -ms /bin/bash gethuser && \
 # Allow gethuser to run necessary commands with sudo
 RUN echo "gethuser ALL=(ALL) NOPASSWD: /bin/umount" >> /etc/sudoers
 
-# Clone the Core Geth repository and build it
+# Clone the Core Geth repository and build it as the non-root user
 USER gethuser
 WORKDIR /home/gethuser
 RUN git clone https://github.com/esculapeso/core-geth.git && \
@@ -31,12 +31,19 @@ RUN git clone https://github.com/esculapeso/core-geth.git && \
     git checkout esa_new_network && \
     make all
 
-# Copy the entrypoint script into the container
+# Switch back to the root user to copy the entrypoint script and set permissions
+USER root
 COPY entrypoint.sh /home/gethuser/core-geth/entrypoint.sh
 RUN chmod +x /home/gethuser/core-geth/entrypoint.sh
 
+# Change ownership back to the non-root user
+RUN chown -R gethuser:gethuser /home/gethuser/core-geth
+
 # Expose necessary ports
 EXPOSE 8545 8546 30303 30303/udp
+
+# Switch to non-root user
+USER gethuser
 
 # Use entrypoint.sh as the entrypoint
 ENTRYPOINT ["/home/gethuser/core-geth/entrypoint.sh"]
