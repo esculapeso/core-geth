@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ps aux | grep geth
+
 # Remove existing data directory if it exists (optional, but ensures a clean state)
 rm -rf /root/.esa
 
