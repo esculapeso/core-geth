@@ -35,7 +35,7 @@ if [ -d "/home/gethuser/.esa" ]; then
 fi
 
 # Initialize the Geth node with the genesis file
-./build/bin/geth --datadir=/home/gethuser/.esa init /home/gethuser/core-geth/esa_genesis.json
+/home/gethuser/core-geth/build/bin/geth --datadir=/home/gethuser/.esa init /home/gethuser/core-geth/esa_genesis.json
 
 # Check if initialization was successful
 if [ $? -ne 0 ]; then
@@ -44,7 +44,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Start the Geth node with the specified parameters
-exec ./build/bin/geth \
+exec /home/gethuser/core-geth/build/bin/geth \
   --http \
   --http.addr "0.0.0.0" \
   --http.port 8545 \
