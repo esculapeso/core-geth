@@ -4,7 +4,7 @@
 unmount_and_remove_directory() {
   if mountpoint -q "$1"; then
     echo "Unmounting and removing directory $1"
-    umount "$1"
+    sudo umount "$1"
     if [ $? -ne 0 ]; then
       echo "Failed to unmount $1. Exiting."
       exit 1
@@ -26,16 +26,16 @@ else
 fi
 
 # Unmount and remove existing data directory if it exists
-unmount_and_remove_directory /root/.esa
+unmount_and_remove_directory /home/gethuser/.esa
 
 # Ensure the directory is removed before proceeding
-if [ -d "/root/.esa" ]; then
-  echo "Failed to remove /root/.esa directory."
+if [ -d "/home/gethuser/.esa" ]; then
+  echo "Failed to remove /home/gethuser/.esa directory."
   exit 1
 fi
 
 # Initialize the Geth node with the genesis file
-./build/bin/geth --datadir=/root/.esa init /root/core-geth/esa_genesis.json
+./build/bin/geth --datadir=/home/gethuser/.esa init /home/gethuser/core-geth/esa_genesis.json
 
 # Check if initialization was successful
 if [ $? -ne 0 ]; then
@@ -50,7 +50,7 @@ exec ./build/bin/geth \
   --http.port 8545 \
   --http.api "eth,web3,personal,net" \
   --http.corsdomain "*" \
-  --ipcpath /root/.esa/geth.ipc \
-  --datadir /root/.esa \
+  --ipcpath /home/gethuser/.esa/geth.ipc \
+  --datadir /home/gethuser/.esa \
   ${IP:+--nat extip:"$IP"} \
   ${BOOTNODES:+--bootnodes "$BOOTNODES"}
