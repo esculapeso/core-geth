@@ -29,7 +29,7 @@ WORKDIR /home/gethuser
 RUN git clone https://github.com/esculapeso/core-geth.git && \
     cd core-geth && \
     git checkout esa_new_network && \
-    make all
+    make geth
 
 # Switch back to the root user to copy the entrypoint script and set permissions
 USER root
