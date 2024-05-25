@@ -1,15 +1,16 @@
 # Use the official CentOS 7 image as the base image
 FROM centos:7
 
-# Install EPEL repository and Software Collections
-RUN yum install -y epel-release centos-release-scl
+# Install EPEL repository and update all packages
+RUN yum install -y epel-release && \
+    yum update -y
 
 # Install Development Tools and devtoolset-7
 RUN yum groupinstall -y "Development Tools" && \
-    yum install -y devtoolset-7
-
-# Install other dependencies
-RUN yum install -y binutils libtool autoconf automake golang git
+    yum install -y centos-release-scl && \
+    yum install -y devtoolset-7 && \
+    yum install -y binutils libtool autoconf automake golang git && \
+    yum clean all
 
 # Enable devtoolset-7
 RUN echo "source /opt/rh/devtoolset-7/enable" >> /etc/profile.d/devtoolset-7.sh
@@ -29,6 +30,7 @@ RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
 COPY entrypoint.sh /root/core-geth/entrypoint.sh
 RUN chmod +x /root/core-geth/entrypoint.sh
 
+# Set the working directory
 WORKDIR /root/core-geth
 
 # Expose necessary ports
