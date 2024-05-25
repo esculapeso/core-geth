@@ -1,6 +1,7 @@
 #!/bin/bash
 
-ps aux | grep geth
+mount | grep /root/.esa
+lsof +D /root/.esa
 
 # Remove existing data directory if it exists (optional, but ensures a clean state)
 rm -rf /root/.esa
