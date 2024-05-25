@@ -1,39 +1,5 @@
 #!/bin/bash
 
-# Function to unmount and remove directory if not in use
-unmount_and_remove_directory() {
-  if mountpoint -q "$1"; then
-    echo "Unmounting and removing directory $1"
-    umount "$1"
-    if [ $? -ne 0 ]; then
-      echo "Failed to unmount $1. Exiting."
-      exit 1
-    fi
-    rm -rf "$1"
-    echo "Directory $1 unmounted and removed successfully"
-  else
-    echo "Directory $1 is not a mount point. Removing directory."
-    rm -rf "$1"
-  fi
-}
-
-# Check for any geth processes (ensure not running)
-if pgrep geth; then
-  echo "Geth process is running. Exiting."
-  exit 1
-else
-  echo "No Geth process found. Continuing."
-fi
-
-# Unmount and remove existing data directory if it exists
-unmount_and_remove_directory /root/.esa
-
-# Ensure the directory is removed before proceeding
-if [ -d "/root/.esa" ]; then
-  echo "Failed to remove /root/.esa directory."
-  exit 1
-fi
-
 # Initialize the Geth node with the genesis file
 ./build/bin/geth --datadir=/root/.esa init /root/core-geth/esa_genesis.json
 
