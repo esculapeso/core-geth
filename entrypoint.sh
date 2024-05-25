@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Remove existing data directory if it exists (optional, but ensures a clean state)
+rm -rf /root/.esa
+
 # Initialize the Geth node with the genesis file
 ./build/bin/geth --datadir=/root/.esa init /root/core-geth/esa_genesis.json
 
