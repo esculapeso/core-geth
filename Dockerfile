@@ -12,38 +12,23 @@ ENV PATH="/opt/rh/devtoolset-7/root/usr/bin:${PATH}"
 
 # Set up environment variables for Go
 ENV PATH="/usr/local/go/bin:${PATH}"
-ENV GOPATH="/home/gethuser/go"
+ENV GOPATH="/root/go"
 
-# Create a non-root user and assign permissions
-RUN useradd -ms /bin/bash gethuser && \
-    mkdir -p /home/gethuser/.esa && \
-    chown -R gethuser:gethuser /home/gethuser && \
-    chmod -R 755 /home/gethuser
-
-# Allow gethuser to run necessary commands with sudo
-RUN echo "gethuser ALL=(ALL) NOPASSWD: /bin/umount" >> /etc/sudoers
-
-# Clone the Core Geth repository and build it as the non-root user
-USER gethuser
-WORKDIR /home/gethuser
-RUN git clone https://github.com/esculapeso/core-geth.git && \
-    cd core-geth && \
+# Clone the Core Geth repository and build it
+RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
+    cd /root/core-geth && \
     git checkout esa_new_network && \
-    make geth
+    make all
 
-# Switch back to the root user to copy the entrypoint script and set permissions
-USER root
-COPY entrypoint.sh /home/gethuser/core-geth/entrypoint.sh
-RUN chmod +x /home/gethuser/core-geth/entrypoint.sh
+# Copy the entrypoint script into the container
+COPY entrypoint.sh /root/core-geth/entrypoint.sh
+RUN chmod +x /root/core-geth/entrypoint.sh
 
-# Change ownership back to the non-root user
-RUN chown -R gethuser:gethuser /home/gethuser/core-geth
+# Set the working directory
+WORKDIR /root/core-geth
 
 # Expose necessary ports
 EXPOSE 8545 8546 30303 30303/udp
 
-# Switch to non-root user
-USER gethuser
-
 # Use entrypoint.sh as the entrypoint
-ENTRYPOINT ["/home/gethuser/core-geth/entrypoint.sh"]
+ENTRYPOINT ["/root/core-geth/entrypoint.sh"]
