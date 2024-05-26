@@ -19,8 +19,6 @@ exec ./build/bin/geth \
   --ipcpath /root/.esa/geth.ipc \
   --datadir /root/.esa \
   --allow-insecure-unlock \
-  --mine \
-  --miner.threads=1 \
   --networkid 83278 \
   ${IP:+--nat extip:"$IP"} \
   ${BOOTNODES:+--bootnodes "$BOOTNODES"}
