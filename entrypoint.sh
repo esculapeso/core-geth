@@ -18,5 +18,6 @@ exec ./build/bin/geth \
   --http.corsdomain "*" \
   --ipcpath /root/.esa/geth.ipc \
   --datadir /root/.esa \
+  --networkid 83278 \
   ${IP:+--nat extip:"$IP"} \
   ${BOOTNODES:+--bootnodes "$BOOTNODES"}
