@@ -14,7 +14,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Start the Geth node with the specified parameters
-GETH_CMD="./build/bin/geth \
+exec ./build/bin/geth \
   --http \
   --http.addr "0.0.0.0" \
   --http.port 8545 \
@@ -25,10 +25,8 @@ GETH_CMD="./build/bin/geth \
   --allow-insecure-unlock \
   --networkid 83278 \
   ${IP:+--nat extip:"$IP"} \
-  ${BOOTNODES:+--bootnodes "$BOOTNODES"}"
+  ${BOOTNODES:+--bootnodes "$BOOTNODES"}
 
-echo "Executing: $GETH_CMD"
 
-exec $GETH_CMD
 
 echo "entrypoint successful"
