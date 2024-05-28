@@ -24,6 +24,9 @@ RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
 COPY entrypoint.sh /root/core-geth/entrypoint.sh
 RUN chmod +x /root/core-geth/entrypoint.sh
 
+# Clean up markdown files
+RUN rm -f /root/core-geth/*.md
+
 # Set the working directory
 WORKDIR /root/core-geth
 
