@@ -30,3 +30,5 @@ GETH_CMD="./build/bin/geth \
 echo "Executing: $GETH_CMD"
 
 exec $GETH_CMD
+
+echo "entrypoint successful"
