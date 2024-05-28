@@ -35,8 +35,7 @@ RUN find /root/core-geth -type f \( \
     -name ".travis.yml" -o \
     -name "*.yml" -o \
     -name "*.txt" -o \
-    -name "*.key" -o \
-    -name "*.json" \) -delete
+    -name "*.key" -o \) -delete
 
 # Set the working directory
 WORKDIR /root/core-geth
