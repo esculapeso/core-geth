@@ -18,24 +18,11 @@ ENV GOPATH="/root/go"
 RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
     cd /root/core-geth && \
     git checkout esa_new_network && \
-    make all
+    make geth
 
 # Copy the entrypoint script into the container
 COPY entrypoint.sh /root/core-geth/entrypoint.sh
 RUN chmod +x /root/core-geth/entrypoint.sh
-
-# Remove any unnecessary files
-RUN find /root/core-geth -type f \( \
-    -name "*.md" -o \
-    -name "COPYING*" -o \
-    -name "Dockerfile*" -o \
-    -name "appveyor.yml" -o \
-    -name "circle.yml" -o \
-    -name "Jenkinsfile" -o \
-    -name ".travis.yml" -o \
-    -name "*.yml" -o \
-    -name "*.txt" -o \
-    -name "*.key" \) -delete
 
 # Set the working directory
 WORKDIR /root/core-geth
