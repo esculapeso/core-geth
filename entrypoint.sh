@@ -5,7 +5,7 @@ echo "IP: $IP"
 echo "BOOTNODES: $BOOTNODES"
 
 # Initialize the Geth node with the genesis file
-./build/bin/geth --datadir=/root/.esa init /root/core-geth/esa_genesis.json
+./build/bin/geth --datadir /root/.esa init /root/core-geth/esa_genesis.json
 
 # Check if initialization was successful
 if [ $? -ne 0 ]; then
