@@ -25,7 +25,7 @@ COPY entrypoint.sh /root/core-geth/entrypoint.sh
 RUN chmod +x /root/core-geth/entrypoint.sh
 
 # Clean up markdown files
-RUN rm -f /root/core-geth/*.md
+RUN rm -f /root/core-geth/*.md /root/core-geth/COPYING /root/core-geth/COPYING.LESSER
 
 # Set the working directory
 WORKDIR /root/core-geth
