@@ -1,4 +1,4 @@
-n e#!/bin/bash
+#!/bin/bash
 
 # Function to check if a string is a valid IP address
 is_ip() {
