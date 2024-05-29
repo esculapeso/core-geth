@@ -36,7 +36,7 @@ esacoin() {
             echo "Preview: $bashcmd"
             eval $bashcmd
         else
-            ${prefix} docker exec -it esanode ./build/bin/geth attach ipc:${ipc_path}
+            ${prefix} docker exec -it esanode ./build/bin/geth attach ipc:$(convert_path "$ipc_path")
         fi
     elif [ "$1" = "run" ]; then
         if [ "$2" = "gai" ]; then
