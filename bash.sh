@@ -1,5 +1,31 @@
 #!/bin/bash
 
+# Function to check command availability
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Function to check availability of dig, nslookup, and host
+check_dns_tools() {
+    local tools=("dig" "nslookup" "host")
+    local available_tools=()
+
+    for tool in "${tools[@]}"; do
+        if command_exists "$tool"; then
+            available_tools+=("$tool")
+        fi
+    done
+
+    if [ ${#available_tools[@]} -eq 0 ]; then
+        echo "None of the tools (dig, nslookup, host) are available."
+    else
+        echo "Available tools: ${available_tools[@]}"
+    fi
+}
+
+# Run the check
+check_dns_tools
+
 # Function to detect if running on Windows (Git Bash)
 is_windows() {
     case "$(uname -s)" in
