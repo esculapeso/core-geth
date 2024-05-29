@@ -1,9 +1,26 @@
+#!/bin/bash
+
+# Function to detect if running on Windows (Git Bash)
+is_windows() {
+    case "$(uname -s)" in
+        CYGWIN*|MINGW32*|MSYS*|MINGW*)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
 esacoin() {
+    local prefix=""
+    is_windows && prefix="winpty"
+
     if [ "$1" = "exec" ]; then
         if [ "$2" = "bash" ]; then
-            docker exec -it esanode /bin/bash
+            ${prefix} docker exec -it esanode /bin/bash
         else
-            docker exec -it esanode ./build/bin/geth attach ipc:/root/.esa/geth.ipc
+            ${prefix} docker exec -it esanode ./build/bin/geth attach ipc:/root/.esa/geth.ipc
         fi
     elif [ "$1" = "run" ]; then
         if [ "$2" = "gai" ]; then
