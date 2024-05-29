@@ -24,7 +24,7 @@ esacoin() {
 
     if [ "$1" = "exec" ]; then
         if [ "$2" = "bash" ]; then
-            local bashcmd="${prefix} docker exec -it esanode ${bash_path}"
+            local bashcmd="docker exec -it esanode ${bash_path}"
             echo "Preview: $bashcmd"
             eval $bashcmd
         else
