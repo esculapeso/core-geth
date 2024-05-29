@@ -15,7 +15,7 @@ is_windows() {
 esacoin() {
     local prefix=""
     local ipc_path="/root/.esa/geth.ipc"
-    local bash_path="/bin/bash"
+    local bash_path="//bin//bash"
     
     if is_windows; then
         prefix="winpty"
