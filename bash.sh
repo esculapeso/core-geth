@@ -15,6 +15,7 @@ is_windows() {
 esacoin() {
     local prefix=""
     local ipc_path="/root/.esa/geth.ipc"
+    local bash_path="/bin/bash"
     
     if is_windows; then
         prefix="winpty"
@@ -23,7 +24,7 @@ esacoin() {
 
     if [ "$1" = "exec" ]; then
         if [ "$2" = "bash" ]; then
-            local bashcmd="${prefix} docker exec -it esanode /bin/bash"
+            local bashcmd="${prefix} docker exec -it esanode ${bash_path}"
             echo "Preview: $bashcmd"
             eval $bashcmd
         else
