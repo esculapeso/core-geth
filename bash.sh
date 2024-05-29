@@ -15,16 +15,24 @@ is_windows() {
 esacoin() {
     local prefix=""
     local ipc_path="/root/.esa/geth.ipc"
-    local bash_path="//bin//bash"
+    local bash_path="/bin/bash"
     
     if is_windows; then
         prefix="winpty"
-        ipc_path="\\\\root\\\\.esa\\\\geth.ipc"
     fi
+
+    convert_path() {
+        if is_windows; then
+            # Convert /path/to to //path//to
+            echo "$1" | sed 's,/,//,g'
+        else
+            echo "$1"
+        fi
+    }
 
     if [ "$1" = "exec" ]; then
         if [ "$2" = "bash" ]; then
-            local bashcmd="${prefix} docker exec -it esanode ${bash_path}"
+            local bashcmd="${prefix} docker exec -it esanode $(convert_path "$bash_path")"
             echo "Preview: $bashcmd"
             eval $bashcmd
         else
