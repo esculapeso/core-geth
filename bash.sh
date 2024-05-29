@@ -13,5 +13,12 @@ esacoin() {
             echo "Preview: $cmd"
             eval $cmd
         fi
+    elif [ "$1" = "stop" ]; then
+        if [ "$2" = "only" ]; then
+            docker stop esanode
+        else
+            docker stop esanode
+            docker rm esanode
+        fi
     fi
 }
