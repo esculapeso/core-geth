@@ -1,30 +1,35 @@
 #!/bin/bash
 
-# Function to check command availability
-command_exists() {
-    command -v "$1" >/dev/null 2>&1
-}
-
-# Function to check availability of dig, nslookup, and host
-check_dns_tools() {
-    local tools=("dig" "nslookup" "host")
-    local available_tools=()
-
-    for tool in "${tools[@]}"; do
-        if command_exists "$tool"; then
-            available_tools+=("$tool")
-        fi
-    done
-
-    if [ ${#available_tools[@]} -eq 0 ]; then
-        echo "None of the tools (dig, nslookup, host) are available."
+# Function to check if a string is a valid IP address
+is_ip() {
+    local ip="$1"
+    # Check if the input matches the format of an IP address
+    if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+        return 0  # It is an IP address
     else
-        echo "Available tools: ${available_tools[@]}"
+        return 1  # It is not an IP address
     fi
 }
 
-# Run the check
-check_dns_tools
+# Function to get IP address from DDNS or return the input if it is already an IP address
+get_ip_from_ddns() {
+    local ddns_name="$1"
+    local ip
+
+    if is_ip "$ddns_name"; then
+        ip="$ddns_name"
+    else
+        # Use nslookup to get the IP address
+        ip=$(nslookup "$ddns_name" | awk '/^Address: / { print $2 }' | tail -n1)
+    fi
+
+    if [ -z "$ip" ]; then
+        echo "No IP address found for $ddns_name"
+        return 1
+    else
+        echo "IP address for $ddns_name: $ip"
+    fi
+}
 
 # Function to detect if running on Windows (Git Bash)
 is_windows() {
@@ -42,6 +47,7 @@ esacoin() {
     local prefix=""
     local ipc_path="/root/.esa/geth.ipc"
     local bash_path="/bin/bash"
+    local conv_ip=$(get_ip_from_ddns "$this_ip")
     
     if is_windows; then
         prefix="winpty"
@@ -64,9 +70,9 @@ esacoin() {
         fi
     elif [ "$1" = "run" ]; then
         if [ "$2" = "gai" ]; then
-            docker run --name esanode -d -p 8546:8546 -p 30303:30303 -v ${this_root_path}:/root/.esa -e IP=$this_ip -e esculapeso/core-geth:latest
+            docker run --name esanode -d -p 8546:8546 -p 30303:30303 -v ${this_root_path}:/root/.esa -e IP=$conv_ip -e esculapeso/core-geth:latest
         else
-            local cmd="docker run --name esanode -d -p 8546:8546 -p 30303:30303 -v ${this_root_path}:/root/.esa -e IP=$this_ip -e BOOTNODES=$gai_bootnode esculapeso/core-geth:latest"
+            local cmd="docker run --name esanode -d -p 8546:8546 -p 30303:30303 -v ${this_root_path}:/root/.esa -e IP=$conv_ip -e BOOTNODES=$gai_bootnode esculapeso/core-geth:latest"
             echo "Preview: $cmd"
             eval $cmd
         fi
