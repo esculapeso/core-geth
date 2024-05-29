@@ -14,13 +14,18 @@ is_windows() {
 
 esacoin() {
     local prefix=""
-    is_windows && prefix="winpty"
+    local ipc_path="/root/.esa/geth.ipc"
+    
+    if is_windows; then
+        prefix="winpty"
+        ipc_path="\\\\root\\\\.esa\\\\geth.ipc"
+    fi
 
     if [ "$1" = "exec" ]; then
         if [ "$2" = "bash" ]; then
             ${prefix} docker exec -it esanode /bin/bash
         else
-            ${prefix} docker exec -it esanode ./build/bin/geth attach ipc:/root/.esa/geth.ipc
+            ${prefix} docker exec -it esanode ./build/bin/geth attach ipc:${ipc_path}
         fi
     elif [ "$1" = "run" ]; then
         if [ "$2" = "gai" ]; then
