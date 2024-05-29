@@ -23,7 +23,9 @@ esacoin() {
 
     if [ "$1" = "exec" ]; then
         if [ "$2" = "bash" ]; then
-            ${prefix} docker exec -it esanode /bin/bash
+            local bashcmd="${prefix} docker exec -it esanode /bin/bash"
+            echo "Preview: $bashcmd"
+            eval $bashcmd
         else
             ${prefix} docker exec -it esanode ./build/bin/geth attach ipc:${ipc_path}
         fi
