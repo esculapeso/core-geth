@@ -1,8 +1,8 @@
 #!/bin/bash
 
-echo "Starting Geth with the following parameters:"
-echo "IP: $IP"
-echo "BOOTNODES: $BOOTNODES"
+echo "Starting Geth with the following parameters:" >&1
+echo "IP: $IP" >&1
+echo "BOOTNODES: $BOOTNODES" >&1
 #!/bin/bash
 
 # Function to resolve DDNS to an IP address
@@ -26,7 +26,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Starting Geth with the following parameters:"
-echo "Resolved IP: $IP"
+echo "Resolved IP: $IP" >&1
 echo "BOOTNODES: $BOOTNODES"
 
 # Start the Geth node with the specified parameters
@@ -48,24 +48,8 @@ exec ./build/bin/geth \
 
 # Check if initialization was successful
 if [ $? -ne 0 ]; then
-  echo "Failed to initialize Geth with genesis file."
+  echo "Failed to initialize Geth with genesis file." >&2
   exit 1
 fi
 
-# Start the Geth node with the specified parameters
-exec ./build/bin/geth \
-  --http \
-  --http.addr "0.0.0.0" \
-  --http.port 8545 \
-  --http.api "eth,web3,personal,net,miner" \
-  --http.corsdomain "*" \
-  --ipcpath /root/.esa/geth.ipc \
-  --datadir /root/.esa \
-  --allow-insecure-unlock \
-  --networkid 83278 \
-  ${IP:+--nat extip:"$IP"} \
-  ${BOOTNODES:+--bootnodes "$BOOTNODES"}
-
-
-
-echo "entrypoint successful"
+echo "entrypoint successful" >&1
