@@ -27,7 +27,7 @@ get_ip_from_ddns() {
         echo "No IP address found for $ddns_name"
         return 1
     else
-        echo "IP address for $ddns_name: $ip"
+        echo "$ip"
     fi
 }
 
