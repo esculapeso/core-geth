@@ -1,4 +1,4 @@
-#!/bin/bash
+n e#!/bin/bash
 
 # Function to check if a string is a valid IP address
 is_ip() {
@@ -82,6 +82,16 @@ esacoin() {
         else
             docker stop esanode
             docker rm esanode
+        fi
+    elif [ "$1" = "docker" ]; then
+        if [ "$2" = "build" ]; then
+            docker build -t esculapeso/core-geth:latest .
+        elif [ "$2" = "pull" ]; then
+            docker pull esculapeso/core-geth:latest
+        elif [ "$2" = "push" ]; then
+            docker push esculapeso/core-geth:latest
+        else
+            docker ps
         fi
     fi
 }
