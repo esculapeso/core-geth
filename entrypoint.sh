@@ -1,20 +1,8 @@
 #!/bin/bash
 
-echo "Starting Geth with the following parameters:" >&1
-echo "IP: $IP" >&1
-echo "BOOTNODES: $BOOTNODES" >&1
-#!/bin/bash
-
-# Function to resolve DDNS to an IP address
-resolve_ip() {
-  local hostname="$1"
-  local ip
-  ip=$(nslookup "$hostname" 2>/dev/null | awk '/^Address: / { print $2 }')
-  echo "$ip"
-}
-
-# Resolve the DDNS address
-IP=$(resolve_ip "$IP")
+echo "Starting Geth with the following parameters:"
+echo "IP: $IP"
+echo "BOOTNODES: $BOOTNODES"
 
 # Initialize the Geth node with the genesis file
 ./build/bin/geth --datadir /root/.esa init /root/core-geth/esa_genesis.json
@@ -24,10 +12,6 @@ if [ $? -ne 0 ]; then
   echo "Failed to initialize Geth with genesis file."
   exit 1
 fi
-
-echo "Starting Geth with the following parameters:"
-echo "Resolved IP: $IP" >&1
-echo "BOOTNODES: $BOOTNODES"
 
 # Start the Geth node with the specified parameters
 exec ./build/bin/geth \
@@ -43,13 +27,4 @@ exec ./build/bin/geth \
   ${IP:+--nat extip:"$IP"} \
   ${BOOTNODES:+--bootnodes "$BOOTNODES"}
 
-# Initialize the Geth node with the genesis file
-./build/bin/geth --datadir /root/.esa init /root/core-geth/esa_genesis.json
-
-# Check if initialization was successful
-if [ $? -ne 0 ]; then
-  echo "Failed to initialize Geth with genesis file." >&2
-  exit 1
-fi
-
-echo "entrypoint successful" >&1
+echo "entrypoint successful"
