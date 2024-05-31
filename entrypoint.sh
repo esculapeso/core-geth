@@ -38,7 +38,8 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
   chmod 600 "$PASSWORD_FILE"
 
   # Create a new account and capture the address
-  ACCOUNT_ADDRESS=$(./build/bin/geth --datadir /root/.esa account new --password "$PASSWORD_FILE" | grep -oP '(?<=Address: \{).*(?=\})')
+  ACCOUNT_ADDRESS=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir /root/.esa account new --password "$PASSWORD_FILE" | grep -oP '(?<=Address: \{).*(?=\})')
+
   echo "New account address: $ACCOUNT_ADDRESS"
 
   # Update the genesis.json file with the new account address
