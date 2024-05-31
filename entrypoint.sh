@@ -15,7 +15,7 @@ PASSWORD_FILE="/root/core-geth/password.txt"
 
 # Check if the necessary environment variable is set
 if [ -z "$ACCOUNT_PASSWORD" ]; then
-  echo "ACCOUNT_PASSWORD is not set. Aborting initialization."
+  echo "ACCOUNT_PASSWORD is not set."
   exit 1
 fi
 
