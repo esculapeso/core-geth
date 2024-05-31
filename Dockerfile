@@ -1,18 +1,12 @@
-# Use the official CentOS 7 image as the base image
-FROM centos:7
+# Use the official Golang image as the base image
+FROM golang:1.17
+
+# Set the environment variables
+ENV GETH_REPO https://github.com/etclabscore/core-geth.git
+ENV GETH_BRANCH release/v1.13.0
 
 # Install necessary tools and dependencies
-RUN yum install -y epel-release centos-release-scl && \
-    yum groupinstall -y "Development Tools" && \
-    yum install -y devtoolset-7 binutils libtool autoconf automake golang git sudo
-
-# Enable devtoolset-7
-RUN echo "source /opt/rh/devtoolset-7/enable" >> /etc/profile.d/devtoolset-7.sh
-ENV PATH="/opt/rh/devtoolset-7/root/usr/bin:${PATH}"
-
-# Set up environment variables for Go
-ENV PATH="/usr/local/go/bin:${PATH}"
-ENV GOPATH="/root/go"
+RUN apt-get update && apt-get install -y build-essential libgmp3-dev
 
 # Clone the Core Geth repository and build it
 RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
