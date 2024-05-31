@@ -6,6 +6,8 @@ echo "Starting Geth with the following parameters:"
 echo "IP: $IP"
 echo "BOOTNODES: $BOOTNODES"
 
+echo "ACCOUNT_PASSWORD: $ACCOUNT_PASSWORD"
+
 # Path to the flag file
 FLAG_FILE="/root/core-geth/initialized.flag"
 GENESIS_FILE="/root/core-geth/esa_genesis.json"
