@@ -32,8 +32,15 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
   echo "$ACCOUNT_PASSWORD" > "$PASSWORD_FILE"
   chmod 600 "$PASSWORD_FILE"
 
-  # Create a new account and capture the address
-  ACCOUNT_ADDRESS=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir /root/.esa account new --password "$PASSWORD_FILE" | grep -oP '(?<=Address: \{).*(?=\})')
+  # Create a new Ethereum account and capture the output
+  ACCOUNT_OUTPUT=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir /root/.esa account new --password "$PASSWORD_FILE" 2>&1)
+  
+  # Log the full output from Geth for debugging
+  echo "Geth Account New Command Output:"
+  echo "$ACCOUNT_OUTPUT"
+  
+  # Extract the address using grep
+  ACCOUNT_ADDRESS=$(echo "$ACCOUNT_OUTPUT" | grep -oP '(?<=Address: \{).*(?=\})')
 
   echo "New account address: $ACCOUNT_ADDRESS"
 
