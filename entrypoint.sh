@@ -8,6 +8,9 @@ echo "IP: $IP"
 echo "BOOTNODES: $BOOTNODES"
 echo "ACCOUNT_PASSWORD: '$ACCOUNT_PASSWORD'"
 
+# Check Geth version
+/go/src/github.com/etclabscore/core-geth/build/bin/geth version 
+
 # Flush output to ensure visibility
 sync
 
