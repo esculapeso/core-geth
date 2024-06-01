@@ -1,9 +1,17 @@
-
-# Use the official Golang image as the base image
+# Use the official Golang 1.17 base image
 FROM golang:1.17
 
-RUN ls -l /root/
+# Set the working directory inside the container
+WORKDIR /app
 
-RUN echo "I start"
+# Copy the Go application source code to the container
+COPY . .
 
-CMD ["/bin/bash"]
+# Build the Go application
+RUN go build -o myapp
+
+# Expose the port the application listens on
+EXPOSE 8080
+
+# Run the Go application when the container starts
+CMD ["./myapp"]
