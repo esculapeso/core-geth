@@ -38,4 +38,4 @@ WORKDIR /root/core-geth
 EXPOSE 8545 8546 30303 30303/udp
 
 # Use entrypoint.sh as the entrypoint
-ENTRYPOINT ["/root/core-geth/entrypoint.sh"]
+#ENTRYPOINT ["/root/core-geth/entrypoint.sh"]
