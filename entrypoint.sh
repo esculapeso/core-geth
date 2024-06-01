@@ -32,7 +32,8 @@ create_account() {
   chmod 600 "$PASSWORD_FILE"
   ACCOUNT_OUTPUT=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir "$DATADIR" account new --password "$PASSWORD_FILE")
   echo "$ACCOUNT_OUTPUT"
-  ACCOUNT_ADDRESS=$(echo "$ACCOUNT_OUTPUT" | grep -oP '(?<=Public address of the key:   ).*')
+  ACCOUNT_ADDRESS=$(echo "$ACCOUNT_OUTPUT" | grep -oP '(?<=Public address of the key:   0x)[0-9a-fA-F]+')
+  ACCOUNT_ADDRESS="0x$ACCOUNT_ADDRESS"
   rm -f "$PASSWORD_FILE"
   echo "$ACCOUNT_ADDRESS"
 }
