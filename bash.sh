@@ -93,5 +93,7 @@ esacoin() {
         else
             docker ps
         fi
+    elif [ "$1" = "clean" ]; then
+        sudo rm -rf ../../esa/datadir/
     fi
 }

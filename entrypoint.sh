@@ -19,7 +19,6 @@ FLAG_FILE="/root/core-geth/initialized.flag"
 GENESIS_FILE="/root/core-geth/esa_genesis.json"
 UPDATED_GENESIS_FILE="/root/core-geth/updated_genesis.json"
 KEYSTORE_DIR="/root/.esa/keystore"
-DATADIR="/root/.esa"
 
 # Flush output to ensure visibility
 sync
