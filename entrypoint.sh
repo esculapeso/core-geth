@@ -6,7 +6,7 @@ set -x  # Enable debug mode to show each command executed
 echo "Starting Geth with the following parameters:"
 echo "IP: $IP"
 echo "BOOTNODES: $BOOTNODES"
-echo "ACCOUNT_PASSWORD: '$ACCOUNT_PASSWORD'"
+echo "ACCOUNT_PASSWORDS: '$ACCOUNT_PASSWORDS'"
 
 # Check Geth version
 ./build/bin/geth version 
@@ -19,14 +19,17 @@ FLAG_FILE="/root/core-geth/initialized.flag"
 GENESIS_FILE="/root/core-geth/esa_genesis.json"
 UPDATED_GENESIS_FILE="/root/core-geth/updated_genesis.json"
 KEYSTORE_DIR="/root/.esa/keystore"
-PASSWORD_FILE="/root/core-geth/password.txt"
+DATADIR="/root/.esa"
 
 # Flush output to ensure visibility
 sync
 
 # Function to create a new account and return the address
 create_account() {
-  ACCOUNT_OUTPUT=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir /root/.esa account new --password "$PASSWORD_FILE")
+  local password=$1
+  echo "$password" > "$PASSWORD_FILE"
+  chmod 600 "$PASSWORD_FILE"
+  ACCOUNT_OUTPUT=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir "$DATADIR" account new --password "$PASSWORD_FILE")
   echo "$ACCOUNT_OUTPUT"
   ACCOUNT_ADDRESS=$(echo "$ACCOUNT_OUTPUT" | grep -oP '(?<=Public address of the key:   ).*')
   echo "$ACCOUNT_ADDRESS"
@@ -36,14 +39,19 @@ create_account() {
 if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
   echo "Initializing the first node with accounts..."
 
-  # Create the password file
-  echo "$ACCOUNT_PASSWORD" > "$PASSWORD_FILE"
-  chmod 600 "$PASSWORD_FILE"
+  # Split the ACCOUNT_PASSWORDS variable into an array
+  IFS=',' read -r -a PASSWORD_ARRAY <<< "$ACCOUNT_PASSWORDS"
+  PASSWORD_FILE="/root/core-geth/password.txt"
 
-  # Create three new Ethereum accounts
-  ACCOUNT_ADDRESS_1=$(create_account)
-  ACCOUNT_ADDRESS_2=$(create_account)
-  ACCOUNT_ADDRESS_3=$(create_account)
+  if [ ${#PASSWORD_ARRAY[@]} -ne 3 ]; then
+    echo "Error: Exactly three passwords must be provided."
+    exit 1
+  fi
+
+  # Create three new Ethereum accounts with different passwords
+  ACCOUNT_ADDRESS_1=$(create_account "${PASSWORD_ARRAY[0]}")
+  ACCOUNT_ADDRESS_2=$(create_account "${PASSWORD_ARRAY[1]}")
+  ACCOUNT_ADDRESS_3=$(create_account "${PASSWORD_ARRAY[2]}")
 
   echo "New account addresses: $ACCOUNT_ADDRESS_1, $ACCOUNT_ADDRESS_2, $ACCOUNT_ADDRESS_3"
 
@@ -69,7 +77,7 @@ fi
 sync
 
 # Initialize the Geth node with the genesis file
-./build/bin/geth --datadir /root/.esa init "$GENESIS_FILE"
+./build/bin/geth --datadir "$DATADIR" init "$GENESIS_FILE"
 
 # Check if initialization was successful
 if [ $? -ne 0 ]; then
@@ -90,7 +98,7 @@ exec ./build/bin/geth \
   --http.api eth,web3,personal,net,miner \
   --http.corsdomain '*' \
   --ipcpath /root/.esa/geth.ipc \
-  --datadir /root/.esa \
+  --datadir "$DATADIR" \
   --allow-insecure-unlock \
   --keystore "$KEYSTORE_DIR" \
   --networkid 83278 \
