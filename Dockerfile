@@ -5,3 +5,5 @@ FROM golang:1.17
 RUN ls -l /root/
 
 RUN echo "I start"
+
+CMD ["tail", "-f", "/dev/null"]
