@@ -10,6 +10,13 @@ RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
     git checkout esa_new_network && \
     make geth
 
+
+# Debugging step: Verify the geth binary exists
+RUN ls -l /root/core-geth/
+
+# Debugging step: Verify the geth binary exists
+RUN ls -l /root/core-geth/build/bin/
+
 # Pull Geth into a second stage deploy alpine container
 FROM alpine:latest
 
