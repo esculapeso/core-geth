@@ -27,11 +27,13 @@ sync
 # Function to create a new account and return the address
 create_account() {
   local password=$1
+  PASSWORD_FILE=$(mktemp)
   echo "$password" > "$PASSWORD_FILE"
   chmod 600 "$PASSWORD_FILE"
   ACCOUNT_OUTPUT=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir "$DATADIR" account new --password "$PASSWORD_FILE")
   echo "$ACCOUNT_OUTPUT"
   ACCOUNT_ADDRESS=$(echo "$ACCOUNT_OUTPUT" | grep -oP '(?<=Public address of the key:   ).*')
+  rm -f "$PASSWORD_FILE"
   echo "$ACCOUNT_ADDRESS"
 }
 
@@ -41,7 +43,6 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
 
   # Split the ACCOUNT_PASSWORDS variable into an array
   IFS=',' read -r -a PASSWORD_ARRAY <<< "$ACCOUNT_PASSWORDS"
-  PASSWORD_FILE="/root/core-geth/password.txt"
 
   if [ ${#PASSWORD_ARRAY[@]} -ne 3 ]; then
     echo "Error: Exactly three passwords must be provided."
