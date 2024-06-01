@@ -7,7 +7,7 @@ RUN ls -l /root/
 RUN echo "I start"
 
 # Install necessary tools and dependencies
-RUN apk add --no-cache make gcc musl-dev linux-headers git
+RUN apt-get update && apt-get install -y build-essential libgmp3-dev
 
 # Clone the Core Geth repository and build it
 RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
