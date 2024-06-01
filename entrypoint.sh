@@ -9,7 +9,7 @@ echo "BOOTNODES: $BOOTNODES"
 echo "ACCOUNT_PASSWORD: '$ACCOUNT_PASSWORD'"
 
 # Check Geth version
-RUN ./build/bin/geth version 
+./build/bin/geth version 
 
 # Flush output to ensure visibility
 sync
