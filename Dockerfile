@@ -6,4 +6,4 @@ RUN ls -l /root/
 
 RUN echo "I start"
 
-CMD ["tail", "-f", "/dev/null"]
+CMD ["tail"]
