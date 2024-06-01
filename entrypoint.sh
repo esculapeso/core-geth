@@ -21,14 +21,6 @@ UPDATED_GENESIS_FILE="/root/core-geth/updated_genesis.json"
 KEYSTORE_DIR="/root/.esa/keystore"
 PASSWORD_FILE="/root/core-geth/password.txt"
 
-# Check if the necessary environment variable is set
-if [ -z "$ACCOUNT_PASSWORD" ]; then
-  echo "ACCOUNT_PASSWORD is not set. Stopping initialization."
-  exit 1
-else
-  echo "ACCOUNT_PASSWORD is set."
-fi
-
 # Flush output to ensure visibility
 sync
 
