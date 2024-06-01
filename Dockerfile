@@ -1,7 +1,5 @@
-RUN echo "beginning"
-
 # Use the official Golang image as the base image
-FROM golang:1.15-alpine as builder
+FROM golang:1.17
 
 RUN echo "I start"
 
@@ -16,9 +14,6 @@ RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
 
 # Debugging step: Verify the geth binary exists
 RUN ls -l /root/core-geth/
-
-# Debugging step: Verify the geth binary exists
-RUN ls -l /root/core-geth/build/bin/
 
 # Pull Geth into a second stage deploy alpine container
 FROM alpine:latest
