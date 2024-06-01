@@ -24,28 +24,37 @@ PASSWORD_FILE="/root/core-geth/password.txt"
 # Flush output to ensure visibility
 sync
 
+# Function to create a new account and return the address
+create_account() {
+  ACCOUNT_OUTPUT=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir /root/.esa account new --password "$PASSWORD_FILE")
+  echo "$ACCOUNT_OUTPUT"
+  ACCOUNT_ADDRESS=$(echo "$ACCOUNT_OUTPUT" | grep -oP '(?<=Public address of the key:   ).*')
+  echo "$ACCOUNT_ADDRESS"
+}
+
 # Check if the initialization has already been done
 if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
-  echo "Initializing the first node with an account..."
+  echo "Initializing the first node with accounts..."
 
   # Create the password file
   echo "$ACCOUNT_PASSWORD" > "$PASSWORD_FILE"
   chmod 600 "$PASSWORD_FILE"
 
-  # Create a new Ethereum account and capture the output
-  ACCOUNT_OUTPUT=$(timeout 30 ./build/bin/geth --verbosity 5 --datadir /root/.esa account new --password "$PASSWORD_FILE")
+  # Create three new Ethereum accounts
+  ACCOUNT_ADDRESS_1=$(create_account)
+  ACCOUNT_ADDRESS_2=$(create_account)
+  ACCOUNT_ADDRESS_3=$(create_account)
 
-											   
-  echo 'Geth Account New Command Output:'
-  echo "$ACCOUNT_OUTPUT"
+  echo "New account addresses: $ACCOUNT_ADDRESS_1, $ACCOUNT_ADDRESS_2, $ACCOUNT_ADDRESS_3"
 
-  # Extract the account address correctly
-  ACCOUNT_ADDRESS=$(echo "$ACCOUNT_OUTPUT" | grep -oP '(?<=Public address of the key:   ).*')
-
-  echo "New account address: $ACCOUNT_ADDRESS"
-
-  # Update the genesis.json file with the new account address
-  jq --arg address "$ACCOUNT_ADDRESS" '.alloc[$address] = { "balance": "0x2a" }' "$GENESIS_FILE" > "$UPDATED_GENESIS_FILE"
+  # Update the genesis.json file with the new account addresses and balances
+  jq --arg address1 "$ACCOUNT_ADDRESS_1" --arg balance1 "0x3B9ACA00" \
+     --arg address2 "$ACCOUNT_ADDRESS_2" --arg balance2 "0x4F88B800" \
+     --arg address3 "$ACCOUNT_ADDRESS_3" --arg balance3 "0x3B9ACA00" \
+     '.alloc[$address1] = { "balance": $balance1 } |
+      .alloc[$address2] = { "balance": $balance2 } |
+      .alloc[$address3] = { "balance": $balance3 }' \
+     "$GENESIS_FILE" > "$UPDATED_GENESIS_FILE"
 
   # Use the updated genesis file
   GENESIS_FILE="$UPDATED_GENESIS_FILE"
