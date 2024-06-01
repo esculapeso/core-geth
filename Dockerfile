@@ -19,13 +19,13 @@ RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
 RUN ls -l /root/core-geth/
 
 # Pull Geth into a second stage deploy alpine container
-FROM alpine:latest
+#FROM alpine:latest
 
 # Install necessary runtime dependencies
-RUN apk add --no-cache ca-certificates
+#RUN apk add --no-cache ca-certificates
 
 # Copy the built geth binary from the builder stage
-COPY --from=builder /root/core-geth/build/bin/geth /usr/local/bin/
+#COPY --from=builder /root/core-geth/build/bin/geth /usr/local/bin/
 
 # Copy the entrypoint script into the container
 COPY entrypoint.sh /root/core-geth/entrypoint.sh
