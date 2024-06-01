@@ -16,6 +16,7 @@ echo "DATADIR: '$DATADIR'"
 sync
 
 # Path to the flag file
+DATADIR="/root/.esa"
 FLAG_FILE="$DATADIR/initialized.flag"
 GENESIS_FILE="/root/core-geth/esa_genesis.json"
 UPDATED_GENESIS_FILE="/root/core-geth/updated_genesis.json"
