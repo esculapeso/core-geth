@@ -1,29 +1,24 @@
-# Use the official Golang 1.17 base image
+# Use the official Golang image as the base image
 FROM golang:1.17
 
-# Set environment variables for logging
-ENV LOG_FILE=/var/log/container.log
+# Set the environment variables
+ENV GETH_REPO https://github.com/etclabscore/core-geth.git
+ENV GETH_BRANCH release/v1.13.0
 
-# Prepare log file
-RUN touch $LOG_FILE && echo "Log file created at $(date)" >> $LOG_FILE
+# Install necessary tools and dependencies
+RUN apt-get update && apt-get install -y build-essential libgmp3-dev
 
-# Set the working directory inside the container
-WORKDIR /app
-RUN echo "Working directory set to /app" >> $LOG_FILE
-
-# Copy the Go application source code to the container
-COPY . .
-RUN echo "Source code copied to /app" >> $LOG_FILE
-
-# Build the Go application
-RUN echo "Building the Go application..." >> $LOG_FILE && \
-    go build -o myapp && \
-    echo "Build completed at $(date)" >> $LOG_FILE
-
-# Expose the port the application listens on
-EXPOSE 8080
-RUN echo "Port 8080 exposed" >> $LOG_FILE
-
-# Run the Go application when the container starts
-CMD echo "Starting the Go application..." >> $LOG_FILE && \
-    ./myapp
+# Clone the Core Geth repository and build it
+RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
+    cd /root/core-geth && \
+    git checkout esa_new_network && \
+    make geth
+# Copy the entrypoint script into the container
+COPY entrypoint.sh /root/core-geth/entrypoint.sh
+RUN chmod +x /root/core-geth/entrypoint.sh
+# Set the working directory
+WORKDIR /root/core-geth
+# Expose necessary ports
+EXPOSE 8545 8546 30303 30303/udp
+# Use entrypoint.sh as the entrypoint
+ENTRYPOINT ["/root/core-geth/entrypoint.sh"]
