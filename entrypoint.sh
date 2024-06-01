@@ -43,7 +43,7 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
 
   # Split the ACCOUNT_PASSWORDS variable into an array
   IFS=',' read -r -a PASSWORD_ARRAY <<< "$ACCOUNT_PASSWORDS"
-
+  
   if [ ${#PASSWORD_ARRAY[@]} -ne 3 ]; then
     echo "Error: Exactly three passwords must be provided."
     exit 1
@@ -57,9 +57,9 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
   echo "New account addresses: $ACCOUNT_ADDRESS_1, $ACCOUNT_ADDRESS_2, $ACCOUNT_ADDRESS_3"
 
   # Update the genesis.json file with the new account addresses and balances
-  jq --arg address1 "$ACCOUNT_ADDRESS_1" --arg balance1 "0x3B9ACA00" \
-     --arg address2 "$ACCOUNT_ADDRESS_2" --arg balance2 "0x4F88B800" \
-     --arg address3 "$ACCOUNT_ADDRESS_3" --arg balance3 "0x3B9ACA00" \
+  jq --arg address1 "$ACCOUNT_ADDRESS_1" --arg balance1 "0x03B9ACA00" \
+     --arg address2 "$ACCOUNT_ADDRESS_2" --arg balance2 "0x04F88B800" \
+     --arg address3 "$ACCOUNT_ADDRESS_3" --arg balance3 "0x03B9ACA00" \
      '.alloc[$address1] = { "balance": $balance1 } |
       .alloc[$address2] = { "balance": $balance2 } |
       .alloc[$address3] = { "balance": $balance3 }' \
