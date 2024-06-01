@@ -6,4 +6,4 @@ RUN ls -l /root/
 
 RUN echo "I start"
 
-CMD ["tail"]
+CMD ["/bin/bash"]
