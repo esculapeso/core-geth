@@ -7,6 +7,7 @@ echo "Starting Geth with the following parameters:"
 echo "IP: $IP"
 echo "BOOTNODES: $BOOTNODES"
 echo "ACCOUNT_PASSWORDS: '$ACCOUNT_PASSWORDS'"
+echo "DATADIR: '$DATADIR'"
 
 # Check Geth version
 ./build/bin/geth version 
@@ -15,10 +16,10 @@ echo "ACCOUNT_PASSWORDS: '$ACCOUNT_PASSWORDS'"
 sync
 
 # Path to the flag file
-FLAG_FILE="/root/core-geth/initialized.flag"
+FLAG_FILE="$DATADIR/initialized.flag"
 GENESIS_FILE="/root/core-geth/esa_genesis.json"
 UPDATED_GENESIS_FILE="/root/core-geth/updated_genesis.json"
-KEYSTORE_DIR="/root/.esa/keystore"
+KEYSTORE_DIR="$DATADIR/keystore"
 
 # Flush output to ensure visibility
 sync
@@ -117,7 +118,7 @@ exec ./build/bin/geth \
   --http.port 8545 \
   --http.api eth,web3,personal,net,miner \
   --http.corsdomain '*' \
-  --ipcpath /root/.esa/geth.ipc \
+  --ipcpath "$DATADIR/geth.ipc" \
   --datadir "$DATADIR" \
   --allow-insecure-unlock \
   --keystore "$KEYSTORE_DIR" \
