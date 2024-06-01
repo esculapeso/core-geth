@@ -6,7 +6,7 @@ ENV GETH_REPO https://github.com/etclabscore/core-geth.git
 ENV GETH_BRANCH release/v1.13.0
 
 # Install necessary tools and dependencies
-RUN apt-get update && apt-get install -y build-essential libgmp3-dev
+RUN apt-get update && apt-get install -y build-essential libgmp3-dev jq
 
 # Clone the Core Geth repository and build it
 RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
