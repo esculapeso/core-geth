@@ -1,6 +1,8 @@
 # Use the official Golang image as the base image
 FROM golang:1.15-alpine as builder
 
+RUN echo "I start"
+
 # Install necessary tools and dependencies
 RUN apk add --no-cache make gcc musl-dev linux-headers git
 
@@ -9,7 +11,6 @@ RUN git clone https://github.com/esculapeso/core-geth.git /root/core-geth && \
     cd /root/core-geth && \
     git checkout esa_new_network && \
     make geth
-
 
 # Debugging step: Verify the geth binary exists
 RUN ls -l /root/core-geth/
