@@ -78,6 +78,10 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
      "$GENESIS_FILE" > "$UPDATED_GENESIS_FILE"
 
   # Print the updated genesis file for debugging
+  echo "Original genesis file content:"
+  cat "$GENESIS_FILE"
+
+  # Print the updated genesis file for debugging
   echo "Updated genesis file content:"
   cat "$UPDATED_GENESIS_FILE"
 
