@@ -17,7 +17,7 @@ FROM alpine:latest
 RUN apk add --no-cache ca-certificates
 
 # Copy the built geth binary from the builder stage
-COPY --from=builder ./build/bin/geth /usr/local/bin/
+COPY --from=builder /root/core-geth/build/bin/geth /usr/local/bin/
 
 # Copy the entrypoint script into the container
 COPY entrypoint.sh /root/core-geth/entrypoint.sh
