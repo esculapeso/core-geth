@@ -1,6 +1,6 @@
 
 # Use the official Golang image as the base image
-FROM golang:1.15-alpine as builder
+FROM golang:1.17
 
 RUN ls -l /root/
 
