@@ -38,6 +38,12 @@ create_account() {
   echo "$ACCOUNT_ADDRESS"
 }
 
+# Function to extract only the account address from the account creation output
+extract_address() {
+  local output=$1
+  echo "$output" | grep -oP '(?<=Public address of the key:   0x)[0-9a-fA-F]+'
+}
+
 # Check if the initialization has already been done
 if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
   echo "Initializing the first node with accounts..."
@@ -51,9 +57,14 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
   fi
 
   # Create three new Ethereum accounts with different passwords
-  ACCOUNT_ADDRESS_1=$(create_account "${PASSWORD_ARRAY[0]}")
-  ACCOUNT_ADDRESS_2=$(create_account "${PASSWORD_ARRAY[1]}")
-  ACCOUNT_ADDRESS_3=$(create_account "${PASSWORD_ARRAY[2]}")
+  ACCOUNT_OUTPUT_1=$(create_account "${PASSWORD_ARRAY[0]}")
+  ACCOUNT_ADDRESS_1=$(extract_address "$ACCOUNT_OUTPUT_1")
+
+  ACCOUNT_OUTPUT_2=$(create_account "${PASSWORD_ARRAY[1]}")
+  ACCOUNT_ADDRESS_2=$(extract_address "$ACCOUNT_OUTPUT_2")
+
+  ACCOUNT_OUTPUT_3=$(create_account "${PASSWORD_ARRAY[2]}")
+  ACCOUNT_ADDRESS_3=$(extract_address "$ACCOUNT_OUTPUT_3")
 
   echo "New account addresses: $ACCOUNT_ADDRESS_1, $ACCOUNT_ADDRESS_2, $ACCOUNT_ADDRESS_3"
 
