@@ -94,6 +94,8 @@ fi
 
 # Use the updated genesis file
 GENESIS_FILE="$UPDATED_GENESIS_FILE"
+echo "Updated genesis file content for following node"
+cat "$UPDATED_GENESIS_FILE"
 
 # Flush output to ensure visibility
 sync
