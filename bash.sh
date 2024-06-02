@@ -88,7 +88,7 @@ esacoin() {
             docker ps
         fi
     elif [ "$1" = "clean" ]; then
-        sudo rm -rf $conv_ip
+        sudo rm -rf $this_root_path
         if [ "$2" = "all" ]; then
             docker stop $(docker ps -q)
             docker rm $(docker ps -a -q)
