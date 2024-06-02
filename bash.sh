@@ -69,13 +69,7 @@ esacoin() {
             ${prefix} docker exec -it esanode ./build/bin/geth attach ipc:$(convert_path "$ipc_path")
         fi
     elif [ "$1" = "run" ]; then
-        if [ "$2" = "gai" ]; then
-            docker run --name esanode -d -p 8546:8546 -p 30303:30303 -v ${this_root_path}:/root/.esa -e IP=$conv_ip -e esculapeso/core-geth:latest
-        else
-            local cmd="docker run --name esanode -d -p 8546:8546 -p 30303:30303 -v ${this_root_path}:/root/.esa -e IP=$conv_ip -e BOOTNODES=$gai_bootnode esculapeso/core-geth:latest"
-            echo "Preview: $cmd"
-            eval $cmd
-        fi
+        docker run --name esanode -d -p 8546:8546 -p 30303:30303 -v ${this_root_path}:/root/.esa -e IP=$conv_ip -e esculapeso/core-geth:latest
     elif [ "$1" = "stop" ]; then
         if [ "$2" = "only" ]; then
             docker stop esanode
