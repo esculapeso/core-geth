@@ -42,13 +42,13 @@
   "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
   "alloc": {
     "895126E94889be47132285635bbd4b5D662715d7": {
-      "balance": "0x3C3B6C0"
+      "balance": "0x3C14DC0"
     },
     "87867E351398FF7383dbAe0DdEb655AEfcB4263F": {
-      "balance": "0x503EAC0"
+      "balance": "0x501BD00"
     },
     "a1dc16E2cE5D47d5c4e1824D29592b63EEFfD23E": {
-      "balance": "0x3C3B6C0"
+      "balance": "0x3C14DC0"
     }
   }
 }
