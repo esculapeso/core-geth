@@ -86,14 +86,14 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
   echo "Updated genesis file content:"
   cat "$UPDATED_GENESIS_FILE"
 
-  # Use the updated genesis file
-  GENESIS_FILE="$UPDATED_GENESIS_FILE"
-
   # Create the flag file to indicate initialization is done
   touch "$FLAG_FILE"
 else
   echo "This node is not the first node or has already been initialized."
 fi
+
+# Use the updated genesis file
+GENESIS_FILE="$UPDATED_GENESIS_FILE"
 
 # Flush output to ensure visibility
 sync
