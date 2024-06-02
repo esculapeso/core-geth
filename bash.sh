@@ -88,12 +88,14 @@ esacoin() {
             docker ps
         fi
     elif [ "$1" = "clean" ]; then
-        sudo rm -rf ../../esa/datadir/
-        docker stop $(docker ps -q)
-        docker rm $(docker ps -a -q)
-        docker rmi $(docker images -q)
-        docker volume rm $(docker volume ls -q)
-        docker network rm $(docker network ls -q)
-        docker system prune -a --volumes
+        sudo rm -rf $conv_ip
+        if [ "$2" = "all" ]; then
+            docker stop $(docker ps -q)
+            docker rm $(docker ps -a -q)
+            docker rmi $(docker images -q)
+            docker volume rm $(docker volume ls -q)
+            docker network rm $(docker network ls -q)
+            docker system prune -a --volumes
+        fi
     fi
 }
