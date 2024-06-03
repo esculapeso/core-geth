@@ -70,9 +70,9 @@ if [ "$FIRST_NODE" = "true" ] && [ ! -f "$FLAG_FILE" ]; then
   echo "New account addresses: $ACCOUNT_ADDRESS_1, $ACCOUNT_ADDRESS_2, $ACCOUNT_ADDRESS_3"
 
   # Update the genesis.json file with the new account addresses and balances
-  jq --arg address1 "$ACCOUNT_ADDRESS_1" --arg balance1 "0x3C14DC0" \
-     --arg address2 "$ACCOUNT_ADDRESS_2" --arg balance2 "0x501BD00" \
-     --arg address3 "$ACCOUNT_ADDRESS_3" --arg balance3 "0x3C14DC0" \
+  jq --arg address1 "$ACCOUNT_ADDRESS_1" --arg balance1 "0x341CC4D7E46E7A9F000000" \
+     --arg address2 "$ACCOUNT_ADDRESS_2" --arg balance2 "0x457BB11FDB3DF8D4000000" \
+     --arg address3 "$ACCOUNT_ADDRESS_3" --arg balance3 "0x341CC4D7E46E7A9F000000" \
      '.alloc[$address1] = { "balance": $balance1 } |
       .alloc[$address2] = { "balance": $balance2 } |
       .alloc[$address3] = { "balance": $balance3 }' \
